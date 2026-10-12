@@ -2,7 +2,7 @@
 //  HunterProgressionTests.swift
 //  AriseTests
 //
-//  Created for "Arise" — Gamified Solo Leveling Productivity App
+//  Created for "System: Awakening" (Arise) — Gamified Solo Leveling Productivity App
 //
 
 import XCTest
@@ -15,6 +15,7 @@ final class HunterProgressionTests: XCTestCase {
         XCTAssertEqual(profile.level, 1)
         XCTAssertEqual(profile.rank, .e)
         XCTAssertEqual(profile.currentExp, 0)
+        XCTAssertEqual(profile.gold, 0)
         XCTAssertEqual(profile.unallocatedStatPoints, 0)
         XCTAssertEqual(profile.stats[.strength], 10)
     }
@@ -64,6 +65,21 @@ final class HunterProgressionTests: XCTestCase {
         XCTAssertEqual(result.profile.rank.canonicalTitle, "Awakened Novice")
     }
 
+    func testGoldEarningAndSpending() {
+        var profile = HunterProfile(name: "Sung Jin-Woo", gold: 100)
+        profile = profile.withEarnedGold(250)
+        XCTAssertEqual(profile.gold, 350)
+
+        // Spend valid amount
+        let purchased = profile.withSpentGold(200)
+        XCTAssertNotNil(purchased)
+        XCTAssertEqual(purchased?.gold, 150)
+
+        // Attempt to spend more than available
+        let failedPurchase = purchased?.withSpentGold(500)
+        XCTAssertNil(failedPurchase)
+    }
+
     func testStatPointAllocation() {
         var profile = HunterProfile(name: "Sung Jin-Woo")
         profile.unallocatedStatPoints = 3
@@ -84,10 +100,12 @@ final class HunterProgressionTests: XCTestCase {
             statPillar: .strength,
             targetQuantity: 100,
             unit: "reps",
-            expReward: 30
+            expReward: 30,
+            goldReward: 20
         )
 
         XCTAssertEqual(quest.progressFraction, 0.0)
+        XCTAssertEqual(quest.goldReward, 20)
         XCTAssertFalse(quest.isCompleted)
 
         let half = quest.withProgress(increment: 50)
@@ -98,5 +116,33 @@ final class HunterProgressionTests: XCTestCase {
         XCTAssertEqual(completed.progressFraction, 1.0)
         XCTAssertTrue(completed.isCompleted)
         XCTAssertEqual(completed.currentQuantity, 100)
+    }
+
+    func testBossRaidDamageAndDefeat() {
+        let milestone1 = BossMilestone(title: "Complete Core Modules", damageAmount: 400)
+        let milestone2 = BossMilestone(title: "Pass Mock Exams", damageAmount: 600)
+
+        var boss = BossRaid(
+            projectTitle: "AWS Cert",
+            bossName: "Kargalgan Shaman",
+            totalHP: 1000,
+            currentHP: 1000,
+            milestones: [milestone1, milestone2]
+        )
+
+        XCTAssertEqual(boss.healthFraction, 1.0)
+        XCTAssertFalse(boss.isDefeated)
+
+        // Complete Milestone 1
+        boss = boss.withCompletedMilestone(id: milestone1.id)
+        XCTAssertEqual(boss.currentHP, 600)
+        XCTAssertEqual(boss.healthFraction, 0.6)
+        XCTAssertFalse(boss.isDefeated)
+
+        // Complete Milestone 2
+        boss = boss.withCompletedMilestone(id: milestone2.id)
+        XCTAssertEqual(boss.currentHP, 0)
+        XCTAssertEqual(boss.healthFraction, 0.0)
+        XCTAssertTrue(boss.isDefeated)
     }
 }

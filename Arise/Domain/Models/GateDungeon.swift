@@ -1,8 +1,8 @@
 //
 //  GateDungeon.swift
-//  Arise
+//  System: Awakening
 //
-//  Created for "Arise" — Gamified Solo Leveling Productivity App
+//  Created for "System: Awakening" (Arise) — Gamified Solo Leveling Productivity App
 //
 
 import Foundation
@@ -22,6 +22,7 @@ public struct GateDungeon: Identifiable, Codable, Equatable, Sendable {
     public var rank: HunterRank
     public var durationMinutes: Int
     public var rewardExp: Int
+    public var rewardGold: Int // Gold rewards for dungeon clearing
     public var rewardStatPillar: StatType
     public var bossName: String
     public var status: GateStatus
@@ -32,6 +33,7 @@ public struct GateDungeon: Identifiable, Codable, Equatable, Sendable {
         rank: HunterRank,
         durationMinutes: Int,
         rewardExp: Int,
+        rewardGold: Int = 50,
         rewardStatPillar: StatType = .intelligence,
         bossName: String,
         status: GateStatus = .available
@@ -41,6 +43,7 @@ public struct GateDungeon: Identifiable, Codable, Equatable, Sendable {
         self.rank = rank
         self.durationMinutes = durationMinutes
         self.rewardExp = rewardExp
+        self.rewardGold = rewardGold
         self.rewardStatPillar = rewardStatPillar
         self.bossName = bossName
         self.status = status
@@ -48,10 +51,10 @@ public struct GateDungeon: Identifiable, Codable, Equatable, Sendable {
 
     /// Presets matching standard focus intervals
     public static let standardPresets: [GateDungeon] = [
-        GateDungeon(name: "Goblin Outpost", rank: .e, durationMinutes: 25, rewardExp: 50, rewardStatPillar: .agility, bossName: "Hobgoblin Leader"),
-        GateDungeon(name: "Shadow Wolf Den", rank: .d, durationMinutes: 45, rewardExp: 90, rewardStatPillar: .perception, bossName: "Steel-Fanged Lycan"),
-        GateDungeon(name: "Golem Sanctuary", rank: .c, durationMinutes: 60, rewardExp: 140, rewardStatPillar: .strength, bossName: "Ancient Granite Golem"),
-        GateDungeon(name: "High Orc Keep", rank: .b, durationMinutes: 90, rewardExp: 220, rewardStatPillar: .intelligence, bossName: "Kargalgan Shaman"),
-        GateDungeon(name: "Red Gate (Extreme)", rank: .s, durationMinutes: 120, rewardExp: 400, rewardStatPillar: .vitality, bossName: "Ice Monarch's Vanguard")
+        GateDungeon(name: "Goblin Outpost", rank: .e, durationMinutes: 25, rewardExp: 50, rewardGold: 30, rewardStatPillar: .agility, bossName: "Hobgoblin Leader"),
+        GateDungeon(name: "Shadow Wolf Den", rank: .d, durationMinutes: 45, rewardExp: 90, rewardGold: 60, rewardStatPillar: .perception, bossName: "Steel-Fanged Lycan"),
+        GateDungeon(name: "Golem Sanctuary", rank: .c, durationMinutes: 60, rewardExp: 140, rewardGold: 100, rewardStatPillar: .strength, bossName: "Ancient Granite Golem"),
+        GateDungeon(name: "High Orc Keep", rank: .b, durationMinutes: 90, rewardExp: 220, rewardGold: 160, rewardStatPillar: .intelligence, bossName: "Kargalgan Shaman"),
+        GateDungeon(name: "Red Gate (Extreme)", rank: .s, durationMinutes: 120, rewardExp: 400, rewardGold: 300, rewardStatPillar: .vitality, bossName: "Ice Monarch's Vanguard")
     ]
 }

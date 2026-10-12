@@ -1,8 +1,8 @@
 //
 //  HunterProfile.swift
-//  Arise
+//  System: Awakening
 //
-//  Created for "Arise" — Gamified Solo Leveling Productivity App
+//  Created for "System: Awakening" (Arise) — Gamified Solo Leveling Productivity App
 //
 
 import Foundation
@@ -11,14 +11,15 @@ import Foundation
 ///
 /// **Interview Rationale:**
 /// - Non-linear Exponential Curve: Level requirements scale smoothly using `100 * Level^1.5`, avoiding flat linear progressions.
-/// - Deterministic Pure State Transitions: All level-up math and stat allocation mutations are pure functions returning new immutable copies,
-///   enabling seamless unit testing without state side-effects.
+/// - Deterministic Pure State Transitions: All level-up math, stat allocations, and economy mutations (Gold) are pure functions
+///   returning new immutable copies, enabling seamless unit testing without state side-effects.
 public struct HunterProfile: Identifiable, Codable, Equatable, Sendable {
     public let id: UUID
     public var name: String
     public var rank: HunterRank
     public var level: Int
     public var currentExp: Int
+    public var gold: Int // Gold currency earned from quests & raids, spendable in System Shop
     public var stats: [StatType: Int]
     public var unallocatedStatPoints: Int
     public var currentStreakDays: Int
@@ -31,6 +32,7 @@ public struct HunterProfile: Identifiable, Codable, Equatable, Sendable {
         rank: HunterRank = .e,
         level: Int = 1,
         currentExp: Int = 0,
+        gold: Int = 0,
         stats: [StatType: Int] = [
             .strength: 10,
             .intelligence: 10,
@@ -48,6 +50,7 @@ public struct HunterProfile: Identifiable, Codable, Equatable, Sendable {
         self.rank = rank
         self.level = level
         self.currentExp = currentExp
+        self.gold = gold
         self.stats = stats
         self.unallocatedStatPoints = unallocatedStatPoints
         self.currentStreakDays = currentStreakDays
@@ -104,6 +107,22 @@ public struct HunterProfile: Identifiable, Codable, Equatable, Sendable {
         }
 
         return (copy, didLevelUp, levelsGained)
+    }
+
+    /// Adds earned gold to the Hunter's balance.
+    public func withEarnedGold(_ amount: Int) -> HunterProfile {
+        guard amount > 0 else { return self }
+        var copy = self
+        copy.gold += amount
+        return copy
+    }
+
+    /// Attempts to spend gold. Returns `nil` if insufficient funds.
+    public func withSpentGold(_ amount: Int) -> HunterProfile? {
+        guard amount > 0, gold >= amount else { return nil }
+        var copy = self
+        copy.gold -= amount
+        return copy
     }
 
     /// Allocates unallocated stat points to a specified attribute.

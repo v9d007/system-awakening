@@ -1,8 +1,8 @@
 //
 //  DailyQuest.swift
-//  Arise
+//  System: Awakening
 //
-//  Created for "Arise" — Gamified Solo Leveling Productivity App
+//  Created for "System: Awakening" (Arise) — Gamified Solo Leveling Productivity App
 //
 
 import Foundation
@@ -22,6 +22,7 @@ public struct DailyQuest: Identifiable, Codable, Equatable, Sendable {
     public var currentQuantity: Double
     public var unit: String
     public var expReward: Int
+    public var goldReward: Int // Gold earned to spend in System Shop
     public var statPointsReward: Int
     public var isCompleted: Bool
     public var isEssential: Bool // Uncompleted essential quests activate the Penalty Zone at midnight
@@ -36,6 +37,7 @@ public struct DailyQuest: Identifiable, Codable, Equatable, Sendable {
         currentQuantity: Double = 0.0,
         unit: String,
         expReward: Int,
+        goldReward: Int = 20,
         statPointsReward: Int = 1,
         isCompleted: Bool = false,
         isEssential: Bool = true,
@@ -49,6 +51,7 @@ public struct DailyQuest: Identifiable, Codable, Equatable, Sendable {
         self.currentQuantity = currentQuantity
         self.unit = unit
         self.expReward = expReward
+        self.goldReward = goldReward
         self.statPointsReward = statPointsReward
         self.isCompleted = isCompleted
         self.isEssential = isEssential
