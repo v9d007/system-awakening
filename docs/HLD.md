@@ -1,4 +1,4 @@
-# High-Level Design (HLD) — "Arise"
+# High-Level Design (HLD) — "System: Awakening"
 
 **Architecture Style:** Clean Architecture + MVVM + Observation Framework  
 **Target:** iOS 17.0+ (Swift 6 Strict Concurrency)  
@@ -26,14 +26,18 @@ The system strictly divides concerns into three distinct layers according to Cle
 │   • CompleteDailyQuestUseCase                                          │
 │   • CalculateHunterProgressionUseCase                                  │
 │   • ProcessDungeonSessionUseCase                                       │
+│   • PurchaseShopItemUseCase                                            │
+│   • DamageBossRaidUseCase                                              │
 │                                                                        │
 │   Domain Repository Protocols (POP)                                    │
 │   • HunterProfileRepositoryProtocol                                    │
 │   • DailyQuestRepositoryProtocol                                       │
 │   • DungeonSessionRepositoryProtocol                                   │
+│   • SystemShopRepositoryProtocol                                       │
 │                                                                        │
 │   Pure Domain Entities (Immutable Sendable Structs)                   │
-│   • HunterProfile, HunterRank, StatType, DailyQuest, GateDungeon       │
+│   • HunterProfile, HunterRank, StatType, DailyQuest, GateDungeon,      │
+│     SystemShopItem, BossRaid                                           │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     ▲ Implements Protocols
                                     │
@@ -90,4 +94,4 @@ actor BackgroundDataActor {
 | :--- | :--- | :--- |
 | **Pure Struct Domain vs SwiftData `@Model` in Views** | Binding `@Model` directly to SwiftUI via `@Query` | **Chosen:** Pure Domain Structs decouple business logic from database schema, making unit testing lightning-fast and actor-safe.<br>**Tradeoff:** Requires manual mapping between `@Model` and Domain structs. |
 | **Observation Framework (`@Observable`) vs Combine (`ObservableObject`)** | `ObservableObject` + `@Published` | **Chosen:** `@Observable` tracks property access at compile-time via Swift macros; views only re-render when properties they actually access change. Eliminates Combine boilerplate. |
-| **Clean Architecture Use Cases vs Fat ViewModels** | Direct Repository calls from ViewModels | **Chosen:** Use Cases ensure single-responsibility domain rules (e.g., leveling math, EXP carryover) can be reused across widgets, App Clips, and Live Activities. |
+| **Clean Architecture Use Cases vs Fat ViewModels** | Direct Repository calls from ViewModels | **Chosen:** Use Cases ensure single-responsibility domain rules (e.g., leveling math, EXP carryover, Gold transactions) can be reused across widgets, App Clips, and Live Activities. |

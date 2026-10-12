@@ -1,12 +1,12 @@
 //
 //  HunterProgressionTests.swift
-//  AriseTests
+//  SystemAwakeningTests
 //
-//  Created for "System: Awakening" (Arise) — Gamified Solo Leveling Productivity App
+//  Created for "System: Awakening" — Gamified Solo Leveling Productivity App
 //
 
 import XCTest
-@testable import Arise
+@testable import SystemAwakening
 
 final class HunterProgressionTests: XCTestCase {
 

@@ -1,12 +1,12 @@
 //
 //  RadarPolygonMathTests.swift
-//  AriseTests
+//  SystemAwakeningTests
 //
-//  Created for "Arise" — Gamified Solo Leveling Productivity App
+//  Created for "System: Awakening" — Gamified Solo Leveling Productivity App
 //
 
 import XCTest
-@testable import Arise
+@testable import SystemAwakening
 
 final class RadarPolygonMathTests: XCTestCase {
 

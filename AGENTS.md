@@ -1,6 +1,6 @@
-# AGENTS.md — Ground Rules & Engineering Standards for "Arise"
+# AGENTS.md — Ground Rules & Engineering Standards for "System: Awakening"
 
-Welcome to **"Arise"** — a production-grade, gamified Solo Leveling productivity app built natively for iOS 17+ using modern Swift & SwiftUI.
+Welcome to **"System: Awakening"** — a production-grade, gamified Solo Leveling productivity app built natively for iOS 17+ using modern Swift & SwiftUI.
 
 This project is built to the standards of senior and staff iOS engineering interviews. Every agent, contributor, and automated tool working on this codebase must adhere strictly to the following architectural contracts and development principles.
 
@@ -21,19 +21,19 @@ Data (SwiftData @Model, Repositories, Background ModelActor)
 ```
 
 ### Layer Constraints
-1. **Domain Layer (`Arise/Domain/`)**:
+1. **Domain Layer (`SystemAwakening/Domain/`)**:
    - **Zero Framework Coupling:** Absolutely no imports of `SwiftUI`, `UIKit`, or `SwiftData`. Only `Foundation` and pure Swift standard library.
-   - **Value Types:** All models (`HunterProfile`, `DailyQuest`, `HunterRank`, `StatType`) must be immutable Swift `struct` or `enum` types conforming to `Sendable`, `Identifiable`, `Codable`, and `Equatable`.
+   - **Value Types:** All models (`HunterProfile`, `DailyQuest`, `HunterRank`, `StatType`, `SystemShopItem`, `BossRaid`) must be immutable Swift `struct` or `enum` types conforming to `Sendable`, `Identifiable`, `Codable`, and `Equatable`.
    - **Protocol-Oriented Programming (POP):** All repositories and services must be defined as protocols in `Domain/Repositories/` or `Domain/Services/`.
    - **Use Cases / Interactors:** Encapsulate business logic into single-responsibility interactor structs/classes (e.g., `CompleteQuestUseCase`).
 
-2. **Presentation Layer (`Arise/Presentation/`)**:
+2. **Presentation Layer (`SystemAwakening/Presentation/`)**:
    - **Observation Framework:** All ViewModels MUST use `@Observable` from the Swift standard `Observation` framework (iOS 17+).
    - **No Legacy Combine State:** Do NOT use `ObservableObject`, `@Published`, or `@StateObject` in new code.
    - **View State Ownership:** Views initialize ViewModels using `@State var viewModel: MyViewModel`. For two-way bindings to properties, use `@Bindable var viewModel = viewModel`.
    - **Actor Isolation:** All ViewModels interacting with SwiftUI views must be annotated with `@MainActor`.
 
-3. **Data Layer (`Arise/Data/`)**:
+3. **Data Layer (`SystemAwakening/Data/`)**:
    - **Decoupled Persistence:** SwiftData models (`SDHunterProfile`, `SDDailyQuest`) belong solely to the Data layer. They must never leak into the Domain or Presentation layers.
    - **Repository Mapping:** Repositories convert SwiftData `@Model` classes to pure Domain structs when returning data, and map Domain structs back to `@Model` for persistence.
    - **Background Concurrency:** Heavy database writes, daily quest resets, or migrations must execute on background threads via a custom Swift 6 `ModelActor`.
@@ -70,7 +70,7 @@ The app features a holographic RPG aesthetic inspired by the *Solo Leveling* ani
 - **Electric Cyan Glow:** `#00E5FF` (System notification borders, active quest rings, level badges).
 - **Shadow Sovereign Purple:** `#7C3AED` (Monarch skills, S-Rank emblems, high-tier focus states).
 - **Penalty Crimson:** `#FF2E63` (Penalty zone alerts, failed timers, emergency challenges).
-- **Gate Amber:** `#F59E0B` (Dungeon alerts and rare achievements).
+- **Gate Amber:** `#F59E0B` (Dungeon alerts, shop currency, and rare achievements).
 
 ### Apple HIG Compliance Rules:
 1. **Touch Targets:** All interactive buttons and controls must have an active hit area of at least **44x44 points**.
@@ -98,6 +98,6 @@ Because this codebase is built as a premier technical portfolio, all significant
 
 ## 5. Testing & Code Quality Bar
 
-- **Domain Logic:** 100% test coverage on leveling equations, EXP rollover, stat calculations, and rank promotions using the modern **Swift Testing** framework (`@Test`, `#expect`).
+- **Domain Logic:** 100% test coverage on leveling equations, EXP rollover, Gold economy, stat calculations, and rank promotions using the modern **Swift Testing** framework (`@Test`, `#expect`).
 - **ViewModels:** Unit tested using mock repositories.
 - **Zero Warnings:** Code must compile with 0 warnings under `-strict-concurrency=complete` and SwiftLint/SwiftFormat guidelines.

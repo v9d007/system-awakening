@@ -1,8 +1,8 @@
 //
 //  StatType.swift
-//  Arise
+//  SystemAwakening
 //
-//  Created for "Arise" — Gamified Solo Leveling Productivity App
+//  Created for "System: Awakening" — Gamified Solo Leveling Productivity App
 //
 
 import Foundation
