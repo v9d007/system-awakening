@@ -1,0 +1,19 @@
+# Xcode
+## User settings
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad
+
+## Build generated
+build/
+DerivedData/
+*.moved-aside
+
+# CocoaPods
+## We ignore Pods directory if desired or keep it according to team convention. In modern iOS, Pods/ is typically ignored.
+Pods/
+
+# Miscellaneous
+*.DS_Store
+*.swp
+*~
