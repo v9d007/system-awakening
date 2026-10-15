@@ -50,7 +50,7 @@ public struct GateDungeon: Identifiable, Codable, Equatable, Sendable {
     }
 
     /// Presets matching standard focus intervals
-    public static let standardPresets: [GateDungeon] = [
+    public nonisolated static let standardPresets: [GateDungeon] = [
         GateDungeon(name: "Goblin Outpost", rank: .e, durationMinutes: 25, rewardExp: 50, rewardGold: 30, rewardStatPillar: .agility, bossName: "Hobgoblin Leader"),
         GateDungeon(name: "Shadow Wolf Den", rank: .d, durationMinutes: 45, rewardExp: 90, rewardGold: 60, rewardStatPillar: .perception, bossName: "Steel-Fanged Lycan"),
         GateDungeon(name: "Golem Sanctuary", rank: .c, durationMinutes: 60, rewardExp: 140, rewardGold: 100, rewardStatPillar: .strength, bossName: "Ancient Granite Golem"),

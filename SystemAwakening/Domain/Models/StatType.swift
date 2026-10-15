@@ -21,6 +21,9 @@ public enum StatType: String, Codable, CaseIterable, Identifiable, Sendable {
 
     public var id: String { rawValue }
 
+    /// Canonical 3-letter abbreviation of the attribute (e.g. STR, INT).
+    public var abbr: String { rawValue }
+
     /// Human-readable full name of the attribute.
     public var displayName: String {
         switch self {
@@ -43,14 +46,23 @@ public enum StatType: String, Codable, CaseIterable, Identifiable, Sendable {
         }
     }
 
-    /// SF Symbol icon name recommended for this stat.
+    /// Exact vertical row order matching the Stitch stat allocation panel.
+    public static let rowOrderedStats: [StatType] = [
+        .strength,
+        .agility,
+        .intelligence,
+        .vitality,
+        .perception
+    ]
+
+    /// SF Symbol icon name matching the Stitch design.
     public var iconSystemName: String {
         switch self {
-        case .strength: return "figure.run"
+        case .strength: return "arrow.up.left.and.arrow.down.right"
+        case .agility: return "wind"
         case .intelligence: return "brain.head.profile"
-        case .agility: return "bolt.fill"
-        case .vitality: return "heart.fill"
-        case .perception: return "eye.fill"
+        case .vitality: return "heart"
+        case .perception: return "eye"
         }
     }
 

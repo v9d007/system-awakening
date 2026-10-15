@@ -2,79 +2,40 @@
 //  ContentView.swift
 //  SystemAwakening
 //
-//  Created by Vinod Kumar Singh on 12/10/26.
+//  Created for "System: Awakening" — Gamified Solo Leveling Productivity App
 //
 
 import SwiftUI
-import SwiftData
 
-struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+/// Root container managing offline app lifecycle synchronization, midnight rollover checks, and live timers.
+@MainActor
+public struct ContentView: View {
+    @Environment(\.scenePhase) private var scenePhase
 
-    var body: some View {
-        NavigationViewWrapper {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
-                }
-                .onDelete(perform: deleteItems)
+    public init() {}
+
+    public var body: some View {
+        RootHUDView()
+            .preferredColorScheme(.dark)
+            .onAppear {
+                DailyCycleManager.shared.checkAndExecuteMidnightRollover()
+                DailyQuestViewModel.shared.startLiveCountdownTimer()
             }
-#if os(macOS)
-            .navigationSplitViewColumnWidth(min: 180, ideal: 200)
-#endif
-            .toolbar {
-#if os(iOS)
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-#endif
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+            .onChange(of: scenePhase) { _, newPhase in
+                switch newPhase {
+                case .active:
+                    DailyCycleManager.shared.checkAndExecuteMidnightRollover()
+                    DailyQuestViewModel.shared.startLiveCountdownTimer()
+                case .background, .inactive:
+                    DailyQuestViewModel.shared.stopLiveCountdownTimer()
+                    DailyQuestViewModel.shared.saveQuestsToStorage()
+                @unknown default:
+                    break
                 }
             }
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
-    }
-}
-
-fileprivate struct NavigationViewWrapper<Content: View>: View {
-    let content: () -> Content
-
-    var body: some View {
-#if os(macOS)
-        NavigationSplitView {
-            content()
-        } detail: {
-            Text("Select an item")
-        }
-#else
-        content()
-#endif
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

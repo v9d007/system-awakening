@@ -35,6 +35,48 @@ public extension Color {
 
     /// Muted Slate for inactive grid lines and borders (`#1E2235`).
     static let systemGridBorder = Color(hex: "1E2235")
+
+    // MARK: - Dynamic Theme Tokens (Backed by active ThemeManager)
+
+    /// Active dynamic canvas background.
+    @MainActor static var systemBackground: Color {
+        ThemeManager.shared.palette.canvasBackground
+    }
+
+    /// Active dynamic frosted card surface.
+    @MainActor static var systemCard: Color {
+        ThemeManager.shared.palette.cardSurface
+    }
+
+    /// Active dynamic card border stroke.
+    @MainActor static var systemBorder: Color {
+        ThemeManager.shared.palette.cardBorder
+    }
+
+    /// Active dynamic primary accent (Royal Ultraviolet in Shadow Monarch, Radiant Gold in Solar Sovereign).
+    @MainActor static var systemPrimary: Color {
+        ThemeManager.shared.palette.primaryAccent
+    }
+
+    /// Active dynamic primary accent glow.
+    @MainActor static var systemPrimaryGlow: Color {
+        ThemeManager.shared.palette.primaryAccentGlow
+    }
+
+    /// Active dynamic secondary accent (Lavender in Shadow Monarch, Electric Azure in Solar Sovereign).
+    @MainActor static var systemSecondary: Color {
+        ThemeManager.shared.palette.secondaryAccent
+    }
+
+    /// Active dynamic primary text readout (Platinum in Shadow Monarch, Champagne Ivory in Solar Sovereign).
+    @MainActor static var systemTextPrimary: Color {
+        ThemeManager.shared.palette.textPrimary
+    }
+
+    /// Active dynamic secondary text readout.
+    @MainActor static var systemTextSecondary: Color {
+        ThemeManager.shared.palette.textSecondary
+    }
 }
 
 public extension Color {

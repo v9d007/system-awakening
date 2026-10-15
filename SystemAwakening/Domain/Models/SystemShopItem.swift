@@ -48,7 +48,7 @@ public struct SystemShopItem: Identifiable, Codable, Equatable, Sendable {
     }
 
     /// Default system catalog presets.
-    public static let defaultSystemItems: [SystemShopItem] = [
+    public nonisolated static let defaultSystemItems: [SystemShopItem] = [
         SystemShopItem(
             title: "Streak Shield",
             itemDescription: "Protects your active streak and nullifies one emergency Penalty Zone trip.",
@@ -73,7 +73,7 @@ public struct SystemShopItem: Identifiable, Codable, Equatable, Sendable {
     ]
 
     /// Default examples of user custom real-world rewards.
-    public static let sampleCustomRewards: [SystemShopItem] = [
+    public nonisolated static let sampleCustomRewards: [SystemShopItem] = [
         SystemShopItem(
             title: "1-Hour Guilt-Free Gaming",
             itemDescription: "Redeem 1 hour of uninterrupted video game time.",

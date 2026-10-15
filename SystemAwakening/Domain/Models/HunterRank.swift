@@ -48,6 +48,11 @@ public enum HunterRank: String, Codable, CaseIterable, Comparable, Sendable {
         }
     }
 
+    /// Convenience alias for canonical title.
+    public var title: String {
+        canonicalTitle
+    }
+
     /// Hex color code representing the rank tier.
     public var hexColor: String {
         switch self {

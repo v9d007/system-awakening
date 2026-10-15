@@ -27,6 +27,8 @@ public struct DailyQuest: Identifiable, Codable, Equatable, Sendable {
     public var isCompleted: Bool
     public var isEssential: Bool // Uncompleted essential quests activate the Penalty Zone at midnight
     public var deadline: Date
+    public var reminderTime: Date?
+    public var isReminderEnabled: Bool
 
     public init(
         id: UUID = UUID(),
@@ -36,12 +38,14 @@ public struct DailyQuest: Identifiable, Codable, Equatable, Sendable {
         targetQuantity: Double,
         currentQuantity: Double = 0.0,
         unit: String,
-        expReward: Int,
-        goldReward: Int = 20,
+        expReward: Int = 30,
+        goldReward: Int = 0,
         statPointsReward: Int = 1,
         isCompleted: Bool = false,
         isEssential: Bool = true,
-        deadline: Date = Calendar.current.startOfDay(for: Date()).addingTimeInterval(86399) // 23:59:59
+        deadline: Date = Calendar.current.startOfDay(for: Date()).addingTimeInterval(86399), // 23:59:59
+        reminderTime: Date? = nil,
+        isReminderEnabled: Bool = false
     ) {
         self.id = id
         self.title = title
@@ -56,6 +60,34 @@ public struct DailyQuest: Identifiable, Codable, Equatable, Sendable {
         self.isCompleted = isCompleted
         self.isEssential = isEssential
         self.deadline = deadline
+        self.reminderTime = reminderTime
+        self.isReminderEnabled = isReminderEnabled
+    }
+
+    // MARK: - Decodable Backwards Compatibility
+    private enum CodingKeys: String, CodingKey {
+        case id, title, description, statPillar, targetQuantity, currentQuantity
+        case unit, expReward, goldReward, statPointsReward, isCompleted, isEssential
+        case deadline, reminderTime, isReminderEnabled
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        self.title = try container.decode(String.self, forKey: .title)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description) ?? ""
+        self.statPillar = try container.decode(StatType.self, forKey: .statPillar)
+        self.targetQuantity = try container.decode(Double.self, forKey: .targetQuantity)
+        self.currentQuantity = try container.decodeIfPresent(Double.self, forKey: .currentQuantity) ?? 0.0
+        self.unit = try container.decode(String.self, forKey: .unit)
+        self.expReward = try container.decodeIfPresent(Int.self, forKey: .expReward) ?? 30
+        self.goldReward = try container.decodeIfPresent(Int.self, forKey: .goldReward) ?? 0
+        self.statPointsReward = try container.decodeIfPresent(Int.self, forKey: .statPointsReward) ?? 1
+        self.isCompleted = try container.decodeIfPresent(Bool.self, forKey: .isCompleted) ?? false
+        self.isEssential = try container.decodeIfPresent(Bool.self, forKey: .isEssential) ?? true
+        self.deadline = try container.decodeIfPresent(Date.self, forKey: .deadline) ?? Calendar.current.startOfDay(for: Date()).addingTimeInterval(86399)
+        self.reminderTime = try container.decodeIfPresent(Date.self, forKey: .reminderTime)
+        self.isReminderEnabled = try container.decodeIfPresent(Bool.self, forKey: .isReminderEnabled) ?? false
     }
 
     /// Normalized completion progress between 0.0 and 1.0.

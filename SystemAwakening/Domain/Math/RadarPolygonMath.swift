@@ -23,13 +23,13 @@ public struct RadarPolygonMath: Sendable {
         }
     }
 
-    /// The 5 stats in canonical clockwise vertex order starting from top (Strength).
+    /// The 5 stats in canonical clockwise vertex order starting from top (Strength), matching the Stitch HUD matrix.
     public static let orderedStats: [StatType] = [
         .strength,     // Top (0 deg / -90 deg from Cartesian standard)
-        .intelligence, // Top Right
-        .agility,      // Bottom Right
-        .vitality,     // Bottom Left
-        .perception    // Top Left
+        .intelligence, // Top Right (+72 deg)
+        .vitality,     // Bottom Right (+144 deg)
+        .perception,   // Bottom Left (+216 deg)
+        .agility       // Top Left (+288 deg)
     ]
 
     /// Calculates the 2D Cartesian vertices for the 5-point data polygon.
